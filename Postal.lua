@@ -225,13 +225,20 @@ end
 -- Hides the minimap unread mail button if there are no unread mail on closing the mailbox.
 -- Does not scan past the first 100 items since only the first 100 are viewable.
 function Postal:MAIL_CLOSED()
-	for i = 1, GetInboxNumItems() do
-		if not select(9, GetInboxHeaderInfo(i)) then return end
+	if not Postal.WOWBCClassic then
+		-- On non-TBC clients, check if all mail has been read before hiding
+		for i = 1, GetInboxNumItems() do
+			if not select(9, GetInboxHeaderInfo(i)) then return end
+		end
 	end
-	if Postal.WOWClassic or Postal.WOWBCClassic or Postal.WOWWotLKClassic or Postal.WOWCataClassic or Postal.WOWMists then
-		MiniMapMailFrame:Hide()
-	else
-		MiniMapMailFrameMixin:OnLeave()
+	-- On TBC Anniversary, GetInboxHeaderInfo does not return wasRead reliably,
+	-- so just hide the icon if the inbox is empty after closing.
+	if GetInboxNumItems() == 0 then
+		if Postal.WOWClassic or Postal.WOWBCClassic or Postal.WOWWotLKClassic or Postal.WOWCataClassic or Postal.WOWMists then
+			MiniMapMailFrame:Hide()
+		else
+			MiniMapMailFrameMixin:OnLeave()
+		end
 	end
 end
 
