@@ -7,7 +7,7 @@
 ## Author: paradosi@Dreamscythe
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb, Jonny aka The_Original_Manbot
 ## X-Category: Mail
-## IconTexture: Interface\AddOns\Postal\mailicon.tga
+## IconTexture: Interface\AddOns\Postal\media\textures\mailicon
 ## Notes: Postal: Enhanced Mailbox support
 ## Notes-ruRU: Postal: Расширенная поддержка почтового ящика
 ## Notes-frFR: Postal: améliorations diverses de l'interface d'envoi/réception de courriers.
@@ -17,6 +17,7 @@
 ## Notes-ptBR: Postal: Apoio caixa reforçada
 ## OptionalDeps: Ace3, !BlizzBugsSuck, !ClassColors
 ## SavedVariables: Postal3DB
+## X-Wago-ID: 4N2kl06L
 
 ## LoadManagers: AddonLoader
 ## X-LoadOn-Mailbox: true

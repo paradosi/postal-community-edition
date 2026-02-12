@@ -1,28 +1,24 @@
-name: Release
+name: Package and release
 
 on:
   push:
     tags:
-      - "v*"
-  workflow_dispatch: {}
-
-permissions:
-  contents: write
+      - '**'
 
 jobs:
-  package:
+  release:
     runs-on: ubuntu-latest
+
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
-      - name: Checkout
+      - name: Clone project
         uses: actions/checkout@v4
-
-      - name: Build zip
-        run: |
-          mkdir -p dist/Postal
-          rsync -a --exclude '.git' --exclude '.github' --exclude 'dist' ./ dist/Postal/
-          (cd dist && zip -r Postal_TBC_Anniversary.zip Postal)
-
-      - name: Release
-        uses: softprops/action-gh-release@v2
         with:
-          files: dist/Postal_TBC_Anniversary.zip
+          fetch-depth: 0
+
+      - name: Package and release
+        uses: BigWigsMods/packager@v2
