@@ -55,3 +55,7 @@ Please report bugs or suggestions on the [GitHub Issues](https://github.com/para
 ## License
 
 MIT. See [LICENSE.txt](LICENSE.txt).
+
+---
+
+[![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=paradosi&button_colour=5F7FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00)](https://www.buymeacoffee.com/paradosi)
