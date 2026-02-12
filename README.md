@@ -1,6 +1,6 @@
 # Postal (TBC Anniversary)
 
-<img src="mailicon.png" width="100" height="100" alt="Postal Icon" />
+<img src="https://github.com/paradosi/postal_tbc_anniversary/blob/main/media/art/mailicon.png?raw=true" width="100" height="100" alt="Postal Icon" />
 
 Enhanced mailbox support for World of Warcraft TBC Classic Anniversary.
 
