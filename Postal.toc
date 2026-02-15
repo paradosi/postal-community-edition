@@ -1,6 +1,6 @@
 ## Interface: 110205
 ## Title: Postal
-## Version: v4.3.4
+## Version: 4.3.12
 ## X-Build: 663
 ## X-ReleaseDate: 2025-10-29T20:49:10Z
 ## X-Revision: 663
