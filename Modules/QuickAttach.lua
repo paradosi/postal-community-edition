@@ -5,23 +5,8 @@ Postal_QuickAttach.description = L["Allows you to quickly attach different trade
 Postal_QuickAttach.description2 = L[ [[|cFFFFCC00*|r A default recipient name can be specified by right clicking on a button.
 |cFFFFCC00*|r Which bags are used by this feature can be set in the main menu.]] ]
 local GetContainerNumSlotsSafe = (C_Container and C_Container.GetContainerNumSlots) or GetContainerNumSlots
-local GetContainerItemInfoSafe = C_Container and C_Container.GetContainerItemInfo or nil
-local GetContainerItemInfoLegacy = GetContainerItemInfo
 local PickupContainerItemSafe = (C_Container and C_Container.PickupContainerItem) or PickupContainerItem
-
-local function GetContainerItemInfoCompat(bagID, slotIndex)
-	if GetContainerItemInfoSafe then
-		return GetContainerItemInfoSafe(bagID, slotIndex)
-	end
-	if GetContainerItemInfoLegacy then
-		local _, _, locked, _, _, _, _, _, _, itemID = GetContainerItemInfoLegacy(bagID, slotIndex)
-		return {
-			isLocked = locked,
-			itemID = itemID,
-		}
-	end
-	return nil
-end
+-- Uses Postal:GetContainerItemInfoCompat() from Postal.lua
 -- Trade Goods supported itemType for C_Item.GetItemInfo() by WoW release version
 -- Classic: Trade Goods(0), Reagent(5, 0)
 -- BCC: Cloth(5), Leather(6), Metal & Stone(7), Meat(8), Herb(9), Enchanting(12), Jewelcrafting(4), Parts(1), Elemental(10), Devices(3), Explosives(2), Materials(13), Other(11)
@@ -232,7 +217,7 @@ function Postal_QuickAttachLeftButtonClick(classID, subclassID)
 		then
 			numberOfSlots = GetContainerNumSlotsSafe(bagID)
 			for slotIndex = 1, numberOfSlots, 1 do
-				local itemInfo = GetContainerItemInfoCompat(bagID, slotIndex)
+				local itemInfo = Postal:GetContainerItemInfoCompat(bagID, slotIndex)
 				locked = itemInfo and itemInfo.isLocked or false
 				if locked == false then
 					itemID = itemInfo and itemInfo.itemID or nil

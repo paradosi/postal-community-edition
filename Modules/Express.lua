@@ -9,25 +9,7 @@ Postal_Express.description2 = L[ [[|cFFFFCC00*|r Shift-Click to take item/money 
 local GetContainerNumSlotsSafe = (C_Container and C_Container.GetContainerNumSlots) or GetContainerNumSlots
 local GetContainerItemIDSafe = (C_Container and C_Container.GetContainerItemID) or GetContainerItemID
 local PickupContainerItemSafe = (C_Container and C_Container.PickupContainerItem) or PickupContainerItem
-local GetContainerItemInfoSafe = C_Container and C_Container.GetContainerItemInfo or nil
-local GetContainerItemInfoLegacy = GetContainerItemInfo
-
-local function GetContainerItemInfoCompat(bag, slot)
-	if GetContainerItemInfoSafe then
-		return GetContainerItemInfoSafe(bag, slot)
-	end
-	if GetContainerItemInfoLegacy then
-		local texture, count, locked, _, _, _, link, _, _, itemID = GetContainerItemInfoLegacy(bag, slot)
-		return {
-			iconFileID = texture,
-			stackCount = count,
-			isLocked = locked,
-			hyperlink = link,
-			itemID = itemID,
-		}
-	end
-	return nil
-end
+-- Uses Postal:GetContainerItemInfoCompat() from Postal.lua
 
 local _G = getfenv(0)
 
@@ -178,7 +160,7 @@ end
 
 function Postal_Express:ContainerFrameItemButtonOnModifiedClick(bag, slot, button)
 	if button == "LeftButton" and IsAltKeyDown() and SendMailFrame:IsVisible() and not CursorHasItem() then
-		local itemInfo = GetContainerItemInfoCompat(bag, slot)
+		local itemInfo = Postal:GetContainerItemInfoCompat(bag, slot)
 		local texture = itemInfo and itemInfo.iconFileID or 0
 		local count = itemInfo and itemInfo.stackCount or 0
 		PickupContainerItemSafe(bag, slot)
@@ -195,7 +177,7 @@ function Postal_Express:ContainerFrameItemButtonOnModifiedClick(bag, slot, butto
 	elseif button == "LeftButton" and IsControlKeyDown() and SendMailFrame:IsVisible() and not CursorHasItem() then
 		local itemid = GetContainerItemIDSafe(bag, slot)
 		if not itemid then return end
-		local itemInfo = GetContainerItemInfoCompat(bag, slot)
+		local itemInfo = Postal:GetContainerItemInfoCompat(bag, slot)
 		local itemlocked = itemInfo and itemInfo.isLocked or false
 		local itemq, _,_, itemc, itemsc, _, itemes = select(3,C_Item.GetItemInfo(itemid))
 		itemes = itemes and #itemes > 0
@@ -216,7 +198,7 @@ function Postal_Express:ContainerFrameItemButtonOnModifiedClick(bag, slot, butto
 					local numberOfSlots = GetContainerNumSlotsSafe(b)
 					for s = 1, numberOfSlots do
 						local tid = GetContainerItemIDSafe(b, s)
-						local itemInfo2 = GetContainerItemInfoCompat(b, s)
+						local itemInfo2 = Postal:GetContainerItemInfoCompat(b, s)
 						local itemlocked2 = itemInfo2 and itemInfo2.isLocked or false
 						if not tid or itemlocked2 or Postal_Express_IsSoulbound(b, s) then
 							-- item locked, already attached, soulbound
@@ -235,7 +217,7 @@ function Postal_Express:ContainerFrameItemButtonOnModifiedClick(bag, slot, butto
 								ClearCursor()
 								PickupContainerItemSafe(b, s)
 								ClickSendMailItemButton()
-								local itemInfo3 = GetContainerItemInfoCompat(b, s)
+								local itemInfo3 = Postal:GetContainerItemInfoCompat(b, s)
 								local itemlocked3 = itemInfo3 and itemInfo3.isLocked or false
 								if itemlocked3 then -- now locked => added
 									added = added + 1

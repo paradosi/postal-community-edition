@@ -113,6 +113,30 @@ function Postal:PLAYER_INTERACTION_MANAGER_FRAME_HIDE(eventName, ...)
 	if paneType ==  Enum.PlayerInteractionType.MailInfo then Postal:MAIL_CLOSED() end
 end
 
+-------------------------------
+-- Shared Compat Utilities  --
+-------------------------------
+
+local GetContainerItemInfoSafe = C_Container and C_Container.GetContainerItemInfo or nil
+local GetContainerItemInfoLegacy = GetContainerItemInfo
+
+function Postal:GetContainerItemInfoCompat(bag, slot)
+	if GetContainerItemInfoSafe then
+		return GetContainerItemInfoSafe(bag, slot)
+	end
+	if GetContainerItemInfoLegacy then
+		local texture, count, locked, _, _, _, link, _, _, itemID = GetContainerItemInfoLegacy(bag, slot)
+		return {
+			iconFileID = texture,
+			stackCount = count,
+			isLocked = locked,
+			hyperlink = link,
+			itemID = itemID,
+		}
+	end
+	return nil
+end
+
 ---------------------------
 -- Postal Core Functions --
 ---------------------------
@@ -156,7 +180,7 @@ function Postal:OnInitialize()
 
 	if Postal.WOWBCClassic then
 		local playerName = UnitName("player") or "Player"
-		self:Print(("Hello %s. Postal %s for TBC is now loaded. Please report any errors or suggestions."):format(playerName, self.version or ""))
+		self:Print(("Hello %s. Postal %s for TBC is now loaded. Please report any errors or suggestions."):format(playerName, self.version or "unknown"))
 	end
 
 	-- Enable/disable modules based on saved settings
