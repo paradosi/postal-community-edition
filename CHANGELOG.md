@@ -2,7 +2,13 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
-## [4.3.10] - 2026-02-15
+## [4.3.12] - 2026-02-15
+
+### Fixed
+- **Rake module**: Gold collected summary now prints correctly in TBC Anniversary (Fixes #2)
+  - `MAIL_CLOSED` event does not fire in TBC Anniversary; replaced with `MailFrame:OnHide` hook
+
+## [4.3.11] - 2026-02-15
 
 ### Fixed
 - Added `#@no-lib-strip@` tags to TBC TOC to prevent duplicate Ace3 libs in packaged releases

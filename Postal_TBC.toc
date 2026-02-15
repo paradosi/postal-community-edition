@@ -1,7 +1,7 @@
 ## Interface: 20505
 ## Title: Postal
-## Version: 4.3.11
-## X-Build: 671
+## Version: 4.3.12
+## X-Build: 672
 ## X-ReleaseDate: 2026-02-15T00:00:00Z
 ## X-Revision: 669
 ## Author: paradosi@Dreamscythe
