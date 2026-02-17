@@ -117,6 +117,27 @@ end
 -- Shared Compat Utilities  --
 -------------------------------
 
+-- Container API wrappers: prefer C_Container namespace (Retail/modern), fall back to legacy globals (Classic/TBC)
+local GetContainerNumFreeSlotsSafe = (C_Container and C_Container.GetContainerNumFreeSlots) or GetContainerNumFreeSlots
+local GetContainerNumSlotsSafe = (C_Container and C_Container.GetContainerNumSlots) or GetContainerNumSlots
+local GetContainerItemIDSafe = (C_Container and C_Container.GetContainerItemID) or GetContainerItemID
+local PickupContainerItemSafe = (C_Container and C_Container.PickupContainerItem) or PickupContainerItem
+local GetContainerFreeSlotsSafe = (C_Container and C_Container.GetContainerFreeSlots) or GetContainerFreeSlots
+
+-- Item API wrappers: prefer C_Item namespace (Retail/modern), fall back to legacy globals (Classic/TBC)
+local GetItemInfoSafe = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+local GetItemCountSafe = (C_Item and C_Item.GetItemCount) or GetItemCount
+
+-- Export safe wrappers so modules can use them via Postal
+Postal.GetContainerNumFreeSlotsSafe = GetContainerNumFreeSlotsSafe
+Postal.GetContainerNumSlotsSafe = GetContainerNumSlotsSafe
+Postal.GetContainerItemIDSafe = GetContainerItemIDSafe
+Postal.PickupContainerItemSafe = PickupContainerItemSafe
+Postal.GetContainerFreeSlotsSafe = GetContainerFreeSlotsSafe
+Postal.GetItemInfoSafe = GetItemInfoSafe
+Postal.GetItemCountSafe = GetItemCountSafe
+
+-- GetContainerItemInfo compat: returns a table with .iconFileID, .stackCount, .isLocked, .hyperlink, .itemID
 local GetContainerItemInfoSafe = C_Container and C_Container.GetContainerItemInfo or nil
 local GetContainerItemInfoLegacy = GetContainerItemInfo
 

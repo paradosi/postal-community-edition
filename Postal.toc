@@ -1,8 +1,8 @@
 ## Interface: 110205
 ## Title: Postal
-## Version: 4.3.12
-## X-Build: 663
-## X-ReleaseDate: 2025-10-29T20:49:10Z
+## Version: 4.3.13
+## X-Build: 673
+## X-ReleaseDate: 2026-02-17T00:00:00Z
 ## X-Revision: 663
 ## Author: paradosi@Dreamscythe
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb, Jonny aka The_Original_Manbot

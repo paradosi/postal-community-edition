@@ -2,6 +2,23 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
+## [4.3.13] - 2026-02-17
+
+### Fixed
+- **Cross-version compatibility**: Added safe wrappers for all container and item APIs that differ between WoW versions
+  - `C_Container.GetContainerNumFreeSlots` / `GetContainerNumFreeSlots`
+  - `C_Container.GetContainerNumSlots` / `GetContainerNumSlots`
+  - `C_Container.GetContainerItemID` / `GetContainerItemID`
+  - `C_Container.PickupContainerItem` / `PickupContainerItem`
+  - `C_Container.GetContainerFreeSlots` / `GetContainerFreeSlots`
+  - `C_Item.GetItemInfo` / `GetItemInfo`
+  - `C_Item.GetItemCount` / `GetItemCount`
+- **Select.lua**: Replaced all hardcoded `C_Container` and `C_Item` calls with safe compat wrappers
+- **OpenAll.lua**: Replaced direct `C_Container.GetContainerItemInfo` and `C_Item` calls with compat wrappers; added nil guard for `OpenAllMail` (may not exist on all clients)
+- **Express.lua**: Replaced `C_Item.GetItemInfo` calls with safe wrapper
+- **Forward.lua**: Replaced all `C_Container` and `C_Item` calls with safe wrappers; removed version-branching `if/else` blocks
+- **QuickAttach.lua**: Replaced `C_Item.GetItemInfo` call with safe wrapper
+
 ## [4.3.12] - 2026-02-15
 
 ### Fixed

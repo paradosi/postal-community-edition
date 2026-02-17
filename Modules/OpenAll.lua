@@ -13,7 +13,7 @@ Postal_OpenAll.description2 = L[ [[|cFFFFCC00*|r Simple filters are available fo
 local MAX_MAIL_SHOWN = 100
 local GetContainerNumFreeSlotsSafe = (C_Container and C_Container.GetContainerNumFreeSlots) or GetContainerNumFreeSlots
 local GetContainerNumSlotsSafe = (C_Container and C_Container.GetContainerNumSlots) or GetContainerNumSlots
-local GetContainerItemInfoSafe = C_Container and C_Container.GetContainerItemInfo or nil
+-- Uses Postal:GetContainerItemInfoCompat() from Postal.lua
 local mailIndex, attachIndex
 local numUnshownItems
 local lastItem, lastNumAttach, lastNumGold
@@ -133,7 +133,7 @@ function Postal_OpenAll:OnEnable()
 		Postal_OpenAll:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_SHOW")
 	end
 	-- For enabling after a disable
-	OpenAllMail:Hide() -- hide Blizzard's Open All button
+	if OpenAllMail then OpenAllMail:Hide() end -- hide Blizzard's Open All button
 	button:Show()
 	Postal_OpenAllMenuButton:SetScript("OnHide", Postal_DropDownMenu.HideMenu)
 	Postal_OpenAllMenuButton:Show()
@@ -142,7 +142,7 @@ end
 function Postal_OpenAll:OnDisable()
 	self:Reset()
 	button:Hide()
-	OpenAllMail:Show() -- show Blizzard's Open All button
+	if OpenAllMail then OpenAllMail:Show() end -- show Blizzard's Open All button
 	Postal_OpenAllMenuButton:SetScript("OnHide", nil)
 	Postal_OpenAllMenuButton:Hide()
 end
@@ -306,24 +306,19 @@ function Postal_OpenAll:ProcessNext()
 			local name, itemID, itemTexture, count, quality, canUse = GetInboxItem(mailIndex, attachIndex)
 			local link = GetInboxItemLink(mailIndex, attachIndex)
 			local itemID = strmatch(link, "item:(%d+)")
-			local stackSize = select(8, C_Item.GetItemInfo(link))
-			if itemID and stackSize and C_Item.GetItemCount(itemID) > 0 then
+			local stackSize = select(8, Postal.GetItemInfoSafe(link))
+			if itemID and stackSize and Postal.GetItemCountSafe(itemID) > 0 then
 				for bag = 0, NUM_BAG_SLOTS do
 					local containerNumSlots = GetContainerNumSlotsSafe(bag)
 					for slot = 1, containerNumSlots do
 						local count2, link2
-						if Postal.WOWBCClassic then
-							count2 = select(2, GetContainerItemInfo(bag, slot))
-							link2 = select(7, GetContainerItemInfo(bag, slot))
+						local itemInfo = Postal:GetContainerItemInfoCompat(bag, slot)
+						if itemInfo then
+							count2 = itemInfo.stackCount
+							link2 = itemInfo.hyperlink
 						else
-							if GetContainerItemInfoSafe and GetContainerItemInfoSafe(bag, slot) then
-								local itemInfo = GetContainerItemInfoSafe(bag, slot)
-								count2 = itemInfo.stackCount
-								link2 = itemInfo.hyperlink
-							else
-								count2 = 0
-								link2 = nil
-							end
+							count2 = 0
+							link2 = nil
 						end
 						if link2 then
 							local itemID2 = strmatch(link2, "item:(%d+)")

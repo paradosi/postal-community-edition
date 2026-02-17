@@ -223,7 +223,7 @@ function Postal_QuickAttachLeftButtonClick(classID, subclassID)
 					itemID = itemInfo and itemInfo.itemID or nil
 					if itemID then
 						if not itemInfoCache[itemID] then
-							itemInfoCache[itemID] = {C_Item.GetItemInfo(itemID)}
+							itemInfoCache[itemID] = {Postal.GetItemInfoSafe(itemID)}
 						end
 						local info = itemInfoCache[itemID]
 						bindType = info[14]

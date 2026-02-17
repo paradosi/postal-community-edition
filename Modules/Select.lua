@@ -350,11 +350,7 @@ function Postal_Select:ProcessNext()
 				local free = 0
 				for bag = 0, NUM_BAG_SLOTS do
 					local bagFree, bagFam
---					if Postal.WOWBCClassic then
---						bagFree, bagFam = GetContainerNumFreeSlots(bag)
---					else
-						bagFree, bagFam = C_Container.GetContainerNumFreeSlots(bag)
---					end
+						bagFree, bagFam = Postal.GetContainerNumFreeSlotsSafe(bag)
 					if bagFam == 0 then
 						free = free + bagFree
 					end
@@ -374,29 +370,19 @@ function Postal_Select:ProcessNext()
 				local name, itemID, itemTexture, count, quality, canUse = GetInboxItem(mailIndex, attachIndex)
 				local link = GetInboxItemLink(mailIndex, attachIndex)
 				itemID = strmatch(link, "item:(%d+)")
-				local stackSize = select(8, C_Item.GetItemInfo(link))
-				if itemID and stackSize and C_Item.GetItemCount(itemID) > 0 then
+				local stackSize = select(8, Postal.GetItemInfoSafe(link))
+				if itemID and stackSize and Postal.GetItemCountSafe(itemID) > 0 then
 					for bag = 0, NUM_BAG_SLOTS do
-						local ContainerNumSlots
-						if Postal.WOWBCClassic then
-							ContainerNumSlots = GetContainerNumSlots(bag)
-						else
-							ContainerNumSlots = C_Container.GetContainerNumSlots(bag)
-						end
+						local ContainerNumSlots = Postal.GetContainerNumSlotsSafe(bag)
 						for slot = 1, ContainerNumSlots do
 							local count2, link2
-							if Postal.WOWBCClassic then
-								count2 = select(2, GetContainerItemInfo(bag, slot))
-								link2 = select(7, GetContainerItemInfo(bag, slot))
+							local itemInfo = Postal:GetContainerItemInfoCompat(bag, slot)
+							if itemInfo then
+								count2 = itemInfo.stackCount
+								link2 = itemInfo.hyperlink
 							else
-								if C_Container and C_Container.GetContainerItemInfo(bag, slot) then
-									local itemInfo = C_Container.GetContainerItemInfo(bag, slot)
-									count2 = itemInfo.stackCount
-									link2 = itemInfo.hyperlink
-								else
-									count2 = 0
-									link2 = nil
-								end
+								count2 = 0
+								link2 = nil
 							end
 							if link2 then
 								local itemID2 = strmatch(link2, "item:(%d+)")
