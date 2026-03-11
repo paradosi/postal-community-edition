@@ -20,11 +20,6 @@ local defaults = {
 			AHOutbid = true,
 			AHSuccess = true,
 			AHWon = true,
-			NeutralAHCancelled = true,
-			NeutralAHExpired = true,
-			NeutralAHOutbid = true,
-			NeutralAHSuccess = true,
-			NeutralAHWon = true,
 			Postmaster = true,
 			Attachments = true,
 			SpamChat = true,
@@ -382,7 +377,7 @@ function Postal.Menu(self, level)
 	wipe(info)
 	if level == 1 then
 		info.isTitle = 1
-		info.text = "Postal"
+		info.text = "Postal CE"
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
 
@@ -633,8 +628,8 @@ function Postal.About()
 	local version = GetAddOnMetadataSafe("Postal", "Version")
 	wipe(t)
 	tinsert(t, "|cFFFFCC00"..GetAddOnMetadataSafe("Postal", "Title").." v"..version.."|r")
-	tinsert(t, "Enhanced mailbox tools for TBC Anniversary.")
-	tinsert(t, "- paradosi@Dreamscythe")
+	tinsert(t, "Enhanced mailbox tools for World of Warcraft.")
+	tinsert(t, "- Community Edition | Originally by paradosi@Dreamscythe")
 	tinsert(t, "-----")
 	tinsert(t, "")
 	for name, module in Postal:IterateModules() do
@@ -649,7 +644,7 @@ function Postal.About()
 		tinsert(t, "")
 	end
 	tinsert(t, "-----")
-	tinsert(t, L["Please post bugs or suggestions at |cFF00FFFFhttps://github.com/paradosi/postal_tbc_anniversary/issues|r. When posting bugs, indicate your locale and Postal's version number v%s."]:format(version))
+	tinsert(t, L["Please post bugs or suggestions at |cFF00FFFFhttps://github.com/paradosi/postal-community-edition/issues|r. When posting bugs, indicate your locale and Postal's version number v%s."]:format(version))
 	tinsert(t, "")
 	tinsert(t, "")
 	Postal.aboutFrame.editBox:SetText(table.concat(t, "\n"))
