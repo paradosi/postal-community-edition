@@ -1,19 +1,19 @@
 ## Interface: 50502
-## Title: Postal
-## Version: 4.3.13
+## Title: Postal Community Edition
+## Version: 4.4.0
 ## X-Build: 673
-## X-ReleaseDate: 2026-02-17T00:00:00Z
+## X-ReleaseDate: 2026-03-11T00:00:00Z
 ## X-Revision: 663
 ## Author: paradosi@Dreamscythe
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb, Jonny aka The_Original_Manbot
 ## X-Category: Mail
-## Notes: Postal: Enhanced Mailbox support
-## Notes-ruRU: Postal: Расширенная поддержка почтового ящика
-## Notes-frFR: Postal: améliorations diverses de l'interface d'envoi/réception de courriers.
-## Notes-esES: Postal: soporte mejorado para el buzon
-## Notes-zhTW: Postal: 強化信箱功能。
-## Notes-zhCN: Postal: 增强信箱功能
-## Notes-ptBR: Postal: Apoio caixa reforçada
+## Notes: Postal Community Edition: Enhanced Mailbox support
+## Notes-ruRU: Postal Community Edition: Расширенная поддержка почтового ящика
+## Notes-frFR: Postal Community Edition: améliorations diverses de l'interface d'envoi/réception de courriers.
+## Notes-esES: Postal Community Edition: soporte mejorado para el buzon
+## Notes-zhTW: Postal Community Edition: 強化信箱功能。
+## Notes-zhCN: Postal Community Edition: 增强信箱功能
+## Notes-ptBR: Postal Community Edition: Apoio caixa reforçada
 ## OptionalDeps: Ace3, !BlizzBugsSuck, !ClassColors
 ## SavedVariables: Postal3DB
 
