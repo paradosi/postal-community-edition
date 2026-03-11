@@ -1,21 +1,21 @@
-# Postal
+# Postal Community Edition
 
-<img src="https://github.com/paradosi/postal_tbc_anniversary/blob/main/media/art/mailicon.png?raw=true" width="100" height="100" alt="Postal Icon" />
+<img src="https://github.com/paradosi/postal-community-edition/blob/main/media/art/mailicon.png?raw=true" width="100" height="100" alt="Postal Icon" />
 
 **Enhanced mailbox support for World of Warcraft.**
 
 Postal replaces and extends the default mailbox UI with batch operations, one-click looting, contact management, and much more. Every feature is modular — enable only what you need from the in-game dropdown menu on the mailbox frame.
 
-Based on the original [Postal](https://www.wowace.com/projects/postal) addon, updated and maintained for modern WoW clients by **paradosi@Dreamscythe**.
+Based on the original [Postal](https://www.wowace.com/projects/postal) addon, updated and maintained for modern WoW clients by the community.
 
 ## Supported WoW Versions
 
 | Version | Interface | Status |
 |---|---|---|
-| TBC Classic Anniversary | 20505 | ✅ Primary target |
+| Retail (Midnight) | 120001 | ✅ Primary target |
+| TBC Classic Anniversary | 20505 | ✅ Supported |
 | Classic Era (Vanilla) | 11508 | ✅ Supported |
 | Mists of Pandaria Anniversary | 50502 | ✅ Supported |
-| Retail (The War Within) | 110205 | ✅ Supported |
 | Wrath of the Lich King Classic | 30403 | ⚠️ TOC included, servers currently offline |
 | Cataclysm Classic | 40402 | ⚠️ TOC included, servers currently offline |
 
@@ -69,16 +69,16 @@ Blocks incoming trade requests while the mailbox is open, preventing accidental 
 
 1. Search for **Postal** on [CurseForge](https://www.curseforge.com/wow/addons) or [Wago Addons](https://addons.wago.io/addons/postal).
 2. Install via the CurseForge or Wago app, or download manually.
-3. Make sure to select the correct game version (TBC Anniversary, Classic Era, Retail, etc.).
+3. Make sure to select the correct game version (Retail, TBC Anniversary, Classic Era, etc.).
 
 ### Manual Installation
 
-1. Download the latest release from [GitHub Releases](https://github.com/paradosi/postal_tbc_anniversary/releases).
-2. Extract the folder into your WoW AddOns directory. For TBC Anniversary:
+1. Download the latest release from [GitHub Releases](https://github.com/paradosi/postal-community-edition/releases).
+2. Extract the folder into your WoW AddOns directory. For Retail:
    ```
-   World of Warcraft/_anniversary_/Interface/AddOns/postal_tbc_anniversary/
+   World of Warcraft/_retail_/Interface/AddOns/Postal/
    ```
-   For other clients, use the appropriate game folder (`_classic_era_`, `_retail_`, etc.).
+   For other clients, use the appropriate game folder (`_anniversary_`, `_classic_era_`, etc.).
 3. At the character select screen, click **AddOns** and ensure **Postal** is enabled.
 4. Open a mailbox in-game. Use the dropdown arrow button at the top-right of the mail frame to configure modules and options.
 
@@ -91,8 +91,8 @@ Blocks incoming trade requests while the mailbox is open, preventing accidental 
 
 ## Bug Reports & Suggestions
 
-Please report issues on the [GitHub Issues](https://github.com/paradosi/postal_tbc_anniversary/issues) page. When reporting bugs, include:
-- Your WoW client version (e.g., TBC Anniversary 2.5.5)
+Please report issues on the [GitHub Issues](https://github.com/paradosi/postal-community-edition/issues) page. When reporting bugs, include:
+- Your WoW client version (e.g., Retail 12.0.1, TBC Anniversary 2.5.5)
 - Your locale (e.g., enUS, deDE)
 - Postal version number (visible in the Help/About panel)
 - The full error message, if any
