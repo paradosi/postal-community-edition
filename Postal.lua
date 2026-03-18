@@ -288,10 +288,11 @@ function Postal:Print(...)
 		text = text.." "..tostring(select(i, ...))
 	end
 
-	if not self:IsChatFrameActive(self.db.profile.ChatOutput) then
-		self.db.profile.ChatOutput = 1
+	local output = self.db.profile.ChatOutput
+	if not self:IsChatFrameActive(output) then
+		output = 1
 	end
-	local chatFrame = _G["ChatFrame"..self.db.profile.ChatOutput]
+	local chatFrame = _G["ChatFrame"..output]
 	if chatFrame then
 		chatFrame:AddMessage(text)
 	end
