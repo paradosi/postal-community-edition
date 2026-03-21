@@ -1,8 +1,8 @@
 ## Interface: 120001
 ## Title: Postal Community Edition
-## Version: 4.4.0
-## X-Build: 673
-## X-ReleaseDate: 2026-03-11T00:00:00Z
+## Version: 4.4.2
+## X-Build: 675
+## X-ReleaseDate: 2026-03-18T00:00:00Z
 ## X-Revision: 663
 ## Author: paradosi@Dreamscythe
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb, Jonny aka The_Original_Manbot
