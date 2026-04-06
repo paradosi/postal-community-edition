@@ -541,7 +541,7 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 					local p, r, f, l, c = strsplit("|", db[i])
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = p
 					end
@@ -595,7 +595,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 					if (pr ~= plre ) then
 						if l and c then
 							local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-							info.text = format("%s-%s-%s |cff%.2x%.2x%.2x(%d %s)|r", p, r, f, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+							info.text = format("%s-%s-%s |cff%.2x%.2x%.2x(%d %s)|r", p, r, f, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 						else
 							info.text = ("%s-%s-%s"):format(p, r, f)
 						end
@@ -710,7 +710,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 					end
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = p
 					end
@@ -730,7 +730,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 					p = all and p.."-"..r or p
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = p
 					end
@@ -753,7 +753,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 					p = all and p.."-"..r.."-"..f or p
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = p
 					end
@@ -774,7 +774,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 				if (pr ~= plre ) then
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = p
 					end
@@ -808,7 +808,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 				if (pr ~= plre ) then
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
-						info.text = format("%s-%s-%s |cff%.2x%.2x%.2x(%d %s)|r", p, r, f, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c])
+						info.text = format("%s-%s-%s |cff%.2x%.2x%.2x(%d %s)|r", p, r, f, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
 					else
 						info.text = ("%s-%s-%s"):format(p, r, f)
 					end
