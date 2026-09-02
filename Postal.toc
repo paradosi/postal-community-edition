@@ -6,6 +6,10 @@
 ## X-Revision: 663
 ## Author: paradosi@Dreamscythe
 ## X-Wago-ID: 4N2kl06L
+# Keep publishing ids in THIS file. The BigWigs packager reads metadata from
+# the TOC matching .pkgmeta's package-as (Postal.toc), not from the flavour
+# TOCs. X-Wago-ID lived only in Postal_TBC.toc until 4.4.3, so releases
+# silently went to GitHub only. There is still no X-Curse-Project-ID.
 ## X-Credits: Ammo, Rabbit, Grennon, Mikk, oscarucb, Jonny aka The_Original_Manbot
 ## X-Category: Mail
 ## IconTexture: 133457

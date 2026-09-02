@@ -402,6 +402,18 @@ function Postal_BlackBook:SortAndCountNumFriends()
 	return numFriends
 end
 
+-- Builds the BlackBook dropdown. Each UIDROPDOWNMENU_MENU_VALUE branch below
+-- is INDEPENDENTLY SCOPED: locals declared in one branch are not visible in
+-- another, even though the branches are near-copies of each other. Paginated
+-- variants (sapart/aapart/delsapart/delaapart, used past 25 alts) were copied
+-- from their unpaginated originals and inherited reads of `plre` and `all`
+-- that were left behind -- both silently nil, so the filters they guarded
+-- never fired. If you add a branch by copying one, re-declare every local it
+-- uses, and run ../check afterwards: an undefined global is the symptom.
+--
+-- Note altstable is built with the current character already excluded, so the
+-- same-realm branches do not depend on the plre filter; the all-realms ones
+-- read the raw alts table and do.
 function Postal_BlackBook.BlackBookMenu(self, level)
 	if not level then return end
 	local altstable = {}
