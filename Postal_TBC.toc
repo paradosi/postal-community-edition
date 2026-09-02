@@ -1,6 +1,6 @@
 ## Interface: 20505
 ## Title: Postal Community Edition
-## Version: 4.4.2
+## Version: 4.4.3
 ## X-Build: 675
 ## X-ReleaseDate: 2026-03-18T00:00:00Z
 ## X-Revision: 669

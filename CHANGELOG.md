@@ -2,6 +2,20 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
+## 4.4.3 — 2026-09-02
+
+### Fixed
+- **Your own character appeared in the paginated all-realms alt menu** — `BlackBook.lua` declared `plre` (player-realm) inside the `allalt` branch but read it in the `aapart` and `sapart` branches, where it was out of scope and therefore `nil`. The guard `pr ~= plre` was always true, so the filter that hides the current character never fired. Only visible on accounts with more than 25 alts, which is when those paginated submenus appear. Note the same-realm (`sapart`) list was unaffected in practice, because `altstable` is already built with the current character excluded.
+- **Removed an undefined-global read** in the `delsapart` branch: `p = all and p.."-"..r or p` referenced an `all` that is not in scope there. It happened to behave correctly, because same-realm lists are never realm-qualified and the nil read evaluated the same as `false`, but it would have broken had any other addon defined a global named `all`.
+
+### Packaging
+- **`X-Wago-ID` was only in `Postal_TBC.toc`.** The BigWigs packager reads metadata from the TOC matching `package-as` — `Postal.toc` — which carried neither a Wago nor a CurseForge id, so releases had no Wago upload target. The id is now in all six TOC files. There is still no `X-Curse-Project-ID` anywhere; add one if a CurseForge project exists.
+
+### Code Cleanup
+- Removed the orphaned `Express.MouseWheel` default. It was the addon's only reference to itself — Express has no mousewheel handling and the key was never exposed in any menu. Leftover from upstream Postal.
+
+---
+
 ## [4.3.13] - 2026-02-17
 
 ### Fixed
