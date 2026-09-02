@@ -727,7 +727,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 			for i = startIndex, endIndex do
 				local name = sorttable[i]
 				local p, r, f, l, c = strsplit("|", db[i])
-					p = all and p.."-"..r or p
+					-- same-realm list: names are never realm-qualified here
 					if l and c then
 						local clr = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[c] or RAID_CLASS_COLORS[c]
 						info.text = format("%s |cff%.2x%.2x%.2x(%d %s)|r", p, clr.r*255, clr.g*255, clr.b*255, l, LOCALIZED_CLASS_NAMES_MALE[c] or c)
@@ -765,6 +765,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 
 		elseif strfind(UIDROPDOWNMENU_MENU_VALUE, "sapart") then
 			local db = altstable
+			local plre = UnitName("player").."-"..GetRealmName()
 			local startIndex = tonumber(strmatch(UIDROPDOWNMENU_MENU_VALUE, "sapart(%d+)")) * 25 - 24
 			local endIndex = math.min(startIndex+24, numAltsOnList)
 			for i = startIndex, endIndex do
@@ -799,6 +800,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 
 		elseif strfind(UIDROPDOWNMENU_MENU_VALUE, "aapart") then
 			local db = Postal.db.global.BlackBook.alts
+			local plre = UnitName("player").."-"..GetRealmName()
 			local startIndex = tonumber(strmatch(UIDROPDOWNMENU_MENU_VALUE, "aapart(%d+)")) * 25 - 24
 			local endIndex = math.min(startIndex+24, #db)
 			for i = startIndex, endIndex do

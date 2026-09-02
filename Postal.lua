@@ -29,7 +29,6 @@ local defaults = {
 			EnableAltClick = true,
 			AutoSend = true,
 			BulkSend = true,
-			MouseWheel = true,
 			MultiItemTooltip = true,
 		},
 		BlackBook = {
