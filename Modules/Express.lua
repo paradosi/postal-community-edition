@@ -50,7 +50,7 @@ function Postal_Express:MAIL_SHOW()
 			end
 			hooksecurefunc("HandleModifiedItemClick", Postal_Express.HandleModifiedItemClick)
 		end
-		if IsClassicClient() then
+		if IsClassicClient() and ContainerFrameItemButton_OnModifiedClick then
 			self:RawHook("ContainerFrameItemButton_OnModifiedClick", true)
 		end
 	end
