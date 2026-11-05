@@ -220,10 +220,11 @@ function Postal_Select:GetUniqueID(index)
 	sender = sender or ""
 	subject = subject or ""
 	hasItem = hasItem or 0
-	wasReturned = wasReturned or 0
-	textCreated = textCreated or 0
-	canReply = canReply or 0
-	isGM = isGM or 0
+	-- these are booleans on current clients; %d needs numbers
+	wasReturned = wasReturned and 1 or 0
+	textCreated = textCreated and 1 or 0
+	canReply = canReply and 1 or 0
+	isGM = isGM and 1 or 0
 	return format("%s%s%s%s%s%s%d%d%d%d%d", packageIcon, stationeryIcon, sender, subject, money, CODAmount, hasItem, wasReturned, textCreated, canReply, isGM)
 end
 
@@ -433,7 +434,7 @@ function Postal_Select:ProcessNext()
 		else
 			-- Return mode
 			if Postal.db.profile.Select.SpamChat and attachIndex == ATTACHMENTS_MAX_RECEIVE then
-				Postal:Print(L["Return"].." "..mailIndex..": "..msgSubject)
+				Postal:Print(L["Return"].." "..mailIndex..": "..(msgSubject or ""))
 			end
 			if not InboxItemCanDelete(mailIndex) then
 				self:RegisterEvent("MAIL_INBOX_UPDATE")
@@ -442,7 +443,7 @@ function Postal_Select:ProcessNext()
 				mailIndex = mailIndex - 1
 				attachIndex = ATTACHMENTS_MAX_RECEIVE
 			else
-				Postal:Print(L["Skipping"].." "..mailIndex..": "..msgSubject)
+				Postal:Print(L["Skipping"].." "..mailIndex..": "..(msgSubject or ""))
 				mailIndex = mailIndex - 1
 				attachIndex = ATTACHMENTS_MAX_RECEIVE
 				return self:ProcessNext() -- tail call
@@ -553,7 +554,9 @@ function Postal_Select:Reset(event, ...)
 	InboxTooMuchMail.Show = printTooMuchMail
 end
 
-function Postal_Select:UI_ERROR_MESSAGE(event, error_message)
+function Postal_Select:UI_ERROR_MESSAGE(event, errorType, message)
+	-- The payload is (errorType, message) on every current client
+	local error_message = type(errorType) == "string" and errorType or message
 	if error_message == ERR_INV_FULL then
 		invFull = true
 		wait = false

@@ -40,7 +40,7 @@ function Postal_CarbonCopy:CopyMail()
 	-- Build the string
 	local _, _, sender, subject = GetInboxHeaderInfo(InboxFrame.openMailID)
 	sender = FROM.." "..(sender or UNKNOWN).."\r\n"
-	subject = MAIL_SUBJECT_LABEL.." "..subject.."\r\n\r\n"
+	subject = MAIL_SUBJECT_LABEL.." "..(subject or "").."\r\n\r\n"
 	local bodyText, _, _, isInvoice = GetInboxText(InboxFrame.openMailID)
 	bodyText = bodyText or ""
 	if isInvoice then

@@ -134,6 +134,7 @@ L["Set subject field to value of coins sent if subject is blank."] = true
 L["Shows a clickable visual icon as to whether a mail will be returned or deleted on expiry."] = true
 L["Skipping"] = true
 L["Some Messages May Have Been Skipped."] = true
+L["Mailbox changed; nothing was deleted. Try again."] = true
 L["Thaumaturge Vashreen"] = true
 L["The Postmaster"] = true
 L["There are %i more messages not currently shown."] = true

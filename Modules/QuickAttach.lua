@@ -283,7 +283,8 @@ local function Postal_QuickAttachSetQAButtonCharName(name, classID, subclassID)
 	end
 	if name ~= "" then tinsert(db, buttonString) end
 	table.sort(db)
-	if #db == 0 then wipe(Postal.db.profile.QuickAttach) end
+	-- Drop only the recipient list; wiping QuickAttach also reset the bag options
+	if #db == 0 then Postal.db.profile.QuickAttach.QAbuttons = nil end
 	for i = 1, #QAButtons, 1 do
 		local c, s, t = QAButtons[i][3], QAButtons[i][4], QAButtons[i][5]
 		if tonumber(c) == tonumber(classID) and tonumber(s) == tonumber(subclassID) then
@@ -309,20 +310,21 @@ StaticPopupDialogs["POSTAL_QUICKATTACH_CHARACTER_NAME"] = {
 	editBoxWidth = 350,  -- Needed in Cata
 	OnAccept = function(self)
 		local name, classID, subclassID = strsplit("|", QAButtonDialogInfo)
-		name = strtrim(StaticPopup1EditBox:GetText())
+		name = strtrim(Postal.GetPopupEditBox(self):GetText())
 		Postal_QuickAttachSetQAButtonCharName(name, classID, subclassID)	
 	end,
 	OnShow = function(self)
 		local name, classID, subclassID = strsplit("|", QAButtonDialogInfo)
-		StaticPopup1EditBox:SetText(name)
-		StaticPopup1EditBox:HighlightText()
-		StaticPopup1EditBox:SetFocus()
+		local editBox = Postal.GetPopupEditBox(self)
+		editBox:SetText(name)
+		editBox:HighlightText()
+		editBox:SetFocus()
 	end,
 	OnHide = quickAttachGuildPopup.OnHide or function() end,
 	EditBoxOnEnterPressed = function(self)
 		local parent = self:GetParent()
 		local name, classID, subclassID = strsplit("|", QAButtonDialogInfo)
-		name = strtrim(StaticPopup1EditBox:GetText())
+		name = strtrim(self:GetText())
 		Postal_QuickAttachSetQAButtonCharName(name, classID, subclassID)	
 		parent:Hide()
 	end,

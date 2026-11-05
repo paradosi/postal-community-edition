@@ -402,7 +402,9 @@ function Postal_OpenAll:Reset(event, ...)
 	end
 end
 
-function Postal_OpenAll:UI_ERROR_MESSAGE(event, error_message)
+function Postal_OpenAll:UI_ERROR_MESSAGE(event, errorType, message)
+	-- The payload is (errorType, message) on every current client
+	local error_message = type(errorType) == "string" and errorType or message
 	if error_message == ERR_INV_FULL then
 		invFull = true
 		wait = false

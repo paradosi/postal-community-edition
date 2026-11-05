@@ -338,6 +338,17 @@ function Postal.ProfileFunc(dropdownbutton, arg1, arg2, checked)
 	CloseDropDownMenus()
 end
 
+-- The edit box of the popup actually showing: StaticPopup1 is only right when
+-- no other popup was already open
+function Postal.GetPopupEditBox(dialog)
+	if dialog then
+		if dialog.GetEditBox then return dialog:GetEditBox() end
+		if dialog.EditBox then return dialog.EditBox end
+		if dialog.editBox then return dialog.editBox end
+	end
+	return StaticPopup1EditBox
+end
+
 local guildPopup = StaticPopupDialogs["SET_GUILDPLAYERNOTE"] or {}
 local function DefaultPopupEscape(self)
 	local parent = self:GetParent()
@@ -352,16 +363,17 @@ StaticPopupDialogs["POSTAL_NEW_PROFILE"] = {
 	maxLetters = 128,
 	editBoxWidth = 350,  -- Needed in Cata
 	OnAccept = function(self)
-		Postal.db:SetProfile(strtrim(StaticPopup1EditBox:GetText()))
+		Postal.db:SetProfile(strtrim(Postal.GetPopupEditBox(self):GetText()))
 	end,
 	OnShow = function(self)
-		StaticPopup1EditBox:SetText(Postal.db:GetCurrentProfile())
-		StaticPopup1EditBox:SetFocus()
+		local editBox = Postal.GetPopupEditBox(self)
+		editBox:SetText(Postal.db:GetCurrentProfile())
+		editBox:SetFocus()
 	end,
 	OnHide = guildPopup.OnHide or function() end,
 	EditBoxOnEnterPressed = function(self)
 		local parent = self:GetParent()
-		Postal.db:SetProfile(strtrim(StaticPopup1EditBox:GetText()))
+		Postal.db:SetProfile(strtrim(self:GetText()))
 		parent:Hide()
 	end,
 	EditBoxOnEscapePressed = guildPopup.EditBoxOnEscapePressed or DefaultPopupEscape,

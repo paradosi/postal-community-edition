@@ -7,6 +7,7 @@ Postal_Forward.description2 = L[ [[|cFFFFCC00*|r Feature is not supported for ma
 |cFFFFCC00*|r Forward button will be disabled in these cases.]] ]
 
 local PostalForwardTable = {}
+local forwardMailID, forwardRemaining -- the mail being forwarded, and how many of its items are left to move
 
 function Postal_Forward:Postal_Forward_ForwardMailItemsEvent(event,...)
 	Postal_Forward_ForwardMailItems(2)
@@ -48,11 +49,12 @@ local function ContainsStackableItem(messageindex)
 	local hasItem, itemID, itemIndex, itemStackCount
 	hasItem = select(8, GetInboxHeaderInfo(messageindex))
 	if hasItem == nil then return false end
-	for itemIndex = 1, ATTACHMENTS_MAX_SEND do
+	for itemIndex = 1, ATTACHMENTS_MAX_RECEIVE do
 		itemID = select(2, GetInboxItem(messageindex, itemIndex))
 		if itemID ~= nil then
 			itemStackCount = select(8,Postal.GetItemInfoSafe(itemID))
-			if itemStackCount > 1 then return true end
+			-- not cached yet: treat as stackable, the safe answer
+			if not itemStackCount or itemStackCount > 1 then return true end
 		end
 	end
 	return false
@@ -127,34 +129,51 @@ function Postal_Forward_OpenMail_Forward()
 		subject = prefix..subject
 	end
 	if subject then SendMailSubjectEditBox:SetText(subject) end
-	if Postal.WOWClassic or Postal.WOWWotLKClassic or Postal.WOWCataClassic or Postal.WOWMists then
-		if bodyText then MailEditBox.ScrollBox.EditBox:SetText(bodyText) end
-	else
-		if bodyText then SendMailBodyEditBox:SetText(bodyText) end
+	-- Retail has SendMailBodyEditBox; the Classic clients (TBC included) use MailEditBox
+	if bodyText then
+		if SendMailBodyEditBox then
+			SendMailBodyEditBox:SetText(bodyText)
+		elseif MailEditBox and MailEditBox.SetText then
+			MailEditBox:SetText(bodyText)
+		end
 	end
 	SendMailNameEditBox:SetFocus()
+	forwardMailID = InboxFrame.openMailID
+	forwardRemaining = select(8, GetInboxHeaderInfo(forwardMailID)) or 0
 	Postal_Forward_ForwardMailItems(1)
 end
 
 -- Deal with attachments that need forwarded
 function Postal_Forward_ForwardMailItems(action)
-	local bagID, itemID, itemIndex, hasItem
-	hasItem = select(8, GetInboxHeaderInfo(InboxFrame.openMailID))
+	local bagID, itemID, itemIndex
 	if action == 1 then
-		if hasItem == nil then return end
-		for itemIndex = 1, ATTACHMENTS_MAX_SEND do
-			itemID = select(2, GetInboxItem(InboxFrame.openMailID, itemIndex))
+		-- Stop after this mail's own items: a mail with no text is deleted once
+		-- emptied, and the next mail would then take its index
+		if not forwardMailID or not forwardRemaining or forwardRemaining <= 0
+			or InboxFrame.openMailID ~= forwardMailID then
+			forwardMailID, forwardRemaining = nil, nil
+			return
+		end
+		for itemIndex = 1, ATTACHMENTS_MAX_RECEIVE do
+			itemID = select(2, GetInboxItem(forwardMailID, itemIndex))
 			if itemID then
 				Postal_Inventory_Change(1)
 				Postal_Forward:RegisterEvent("BAG_UPDATE_DELAYED","Postal_Forward_ForwardMailItemsEvent")
-				TakeInboxItem(InboxFrame.openMailID, itemIndex)
+				forwardRemaining = forwardRemaining - 1
+				TakeInboxItem(forwardMailID, itemIndex)
 				return
 			end
 		end
+		forwardMailID, forwardRemaining = nil, nil
 	end
 	if action == 2 then
-		Postal_Forward:UnregisterEvent("BAG_UPDATE_DELAYED","Postal_Forward_ForwardMailItemsEvent")
+		Postal_Forward:UnregisterEvent("BAG_UPDATE_DELAYED")
 		bagID, itemIndex = Postal_Inventory_Change(2)
+		if not bagID or not itemIndex then
+			-- the item has not landed in a bag we can see; stop rather than guess
+			forwardMailID, forwardRemaining = nil, nil
+			return
+		end
 		Postal.PickupContainerItemSafe(bagID, itemIndex)
 		ClickSendMailItemButton()
 		Postal_Forward_ForwardMailItems(1)

@@ -2,6 +2,22 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
+## 4.4.5 — 2026-11-05
+
+### Fixed
+- Open All and the Select "Open" button no longer hang on "In Progress" when your bags fill up or a mail holds a unique item you already have. Postal never noticed the game's "inventory full" error
+- Forward: forwarding a mail that has text no longer causes a Lua error on TBC Anniversary and Classic Era
+- Forward no longer pulls items from the next mail when the forwarded mail is deleted after being emptied
+- Forward: a mail whose items aren't cached yet no longer errors when you open it
+- Retail: the Alt-Click and Control-Click hints now appear on item tooltips at the mailbox
+- Retail: Alt-Click no longer attaches or sends an item once per mailbox visit so far this session, and turning off "Enable Alt-Click to send mail" now actually turns it off
+- Do Not Want: if new mail arrives while the delete confirmation is open, Postal no longer deletes whichever mail has moved into that spot. It deletes nothing and asks you to try again
+- Trade Block: trades you block yourself in the game options stay blocked after you leave the mailbox, and guild charter petitions are no longer left blocked after a mailbox visit
+- Quick Attach: clearing the last default recipient no longer resets your bag choices
+- The New Profile and Quick Attach recipient dialogs read the right text box when another popup is already open
+- Russian client: the Wire subject no longer shows stray "+" signs
+- Copying or returning a mail with no subject no longer causes a Lua error
+
 ## 4.4.4 — 2026-11-05
 
 ### Changed

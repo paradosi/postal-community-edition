@@ -8,14 +8,31 @@ Postal_DoNotWant.description = L["Shows a clickable visual icon as to whether a 
 local _G = getfenv(0)
 local selectedID
 local selectedIDmoney
+local selectedKey
+
+-- What the confirmation was asked about. The inbox can refresh while the
+-- dialog is open (new mail arrives at the top), which moves the index.
+local function MailKey(index)
+	local _, _, sender, subject, money, _, _, itemCount = GetInboxHeaderInfo(index)
+	return (sender or "").."|"..(subject or "").."|"..(money or 0).."|"..(itemCount or 0).."|"..(GetInboxItem(index, 1) or "")
+end
+
+local function DeleteSelected()
+	if selectedID and selectedKey == MailKey(selectedID) then
+		DeleteInboxItem(selectedID)
+	else
+		Postal:Print(L["Mailbox changed; nothing was deleted. Try again."])
+	end
+	selectedID = nil
+	selectedKey = nil
+end
 
 StaticPopupDialogs["POSTAL_DELETE_MAIL"] = {
 	text = DELETE_MAIL_CONFIRMATION,
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function(self)
-		DeleteInboxItem(selectedID)
-		selectedID = nil
+		DeleteSelected()
 		--HideUIPanel(OpenMailFrame)
 	end,
 	showAlert = 1,
@@ -28,8 +45,7 @@ StaticPopupDialogs["POSTAL_DELETE_MONEY"] = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
 	OnAccept = function(self)
-		DeleteInboxItem(selectedID)
-		selectedID = nil
+		DeleteSelected()
 		--HideUIPanel(OpenMailFrame)
 	end,
 	OnShow = function(self)
@@ -45,6 +61,7 @@ function Postal_DoNotWant.Click(self, button, down)
 	selectedID = self.id + (InboxFrame.pageNum-1)*7
 	local packageIcon, stationeryIcon, sender, subject, money, CODAmount, daysLeft, itemCount, wasRead, wasReturned, textCreated, canReply = GetInboxHeaderInfo(selectedID)
 	selectedIDmoney = money
+	selectedKey = MailKey(selectedID)
 	local firstAttachName
 	for i = 1, ATTACHMENTS_MAX_RECEIVE do
 		firstAttachName = GetInboxItem(selectedID, i)
