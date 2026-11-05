@@ -1,4 +1,4 @@
-## Interface: 11508
+## Interface: 11509
 ## Title: Postal Community Edition
 ## Version: 4.4.3
 ## X-Build: 675
