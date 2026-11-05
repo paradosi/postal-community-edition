@@ -6,6 +6,7 @@ Postal_QuickAttach.description2 = L[ [[|cFFFFCC00*|r A default recipient name ca
 |cFFFFCC00*|r Which bags are used by this feature can be set in the main menu.]] ]
 local GetContainerNumSlotsSafe = (C_Container and C_Container.GetContainerNumSlots) or GetContainerNumSlots
 local PickupContainerItemSafe = (C_Container and C_Container.PickupContainerItem) or PickupContainerItem
+local GetSpellTextureSafe = (C_Spell and C_Spell.GetSpellTexture) or GetSpellTexture
 -- Uses Postal:GetContainerItemInfoCompat() from Postal.lua
 -- Trade Goods supported itemType for C_Item.GetItemInfo() by WoW release version
 -- Classic: Trade Goods(0), Reagent(5, 0)
@@ -65,103 +66,69 @@ local function Postal_QuickAttachShowButtons()
 	end
 end
 
+-- The trade goods subclasses TBC through Mists share (classID 7), with each
+-- expansion's additions before and after "Other", then the catch-all button
+local function ClassicTradeGoodsButtons(beforeOther, afterOther)
+	local list = {
+		{GetSpellTextureSafe(3908), 7, 5, L["Cloth"]},
+		{GetSpellTextureSafe(2108), 7, 6, L["Leather"]},
+		{GetSpellTextureSafe(2656), 7, 7, L["Metal & Stone"]},
+		{GetSpellTextureSafe(2550), 7, 8, L["Cooking"]},
+		{GetSpellTextureSafe(2383), 7, 9, L["Herb"]},
+		{GetSpellTextureSafe(7411), 7, 12, L["Enchanting"]},
+		{GetSpellTextureSafe(25229), 7, 4, L["Jewelcrafting"]},
+		{"Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]},
+		{"Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]},
+		{"Interface/Icons/inv_gizmo_goblingtonkcontroller", 7, 3, L["Devices"]},
+		{"Interface/Icons/INV_Misc_Ammo_Gunpowder_01", 7, 2, L["Explosives"]},
+	}
+	for _, b in ipairs(beforeOther) do tinsert(list, b) end
+	tinsert(list, {"Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
+	for _, b in ipairs(afterOther) do tinsert(list, b) end
+	tinsert(list, {"Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
+	return list
+end
+
 -- Create QuickAttach buttons and hook OnClick events
 function Postal_QuickAttach:OnEnable()
 	if not Postal_QuickAttachButton1 then
 		QAButtons = {}
+		local list
 		if Postal.WOWClassic == true then
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(2018), 7, 0, L["Trade Goods"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", "Interface/Icons/inv_misc_food_02", 5, 0, L["Reagent"]})
-		end
-		if Postal.WOWBCClassic == true then
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(3908), 7, 5, L["Cloth"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", GetSpellTexture(2108), 7, 6, L["Leather"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton3", GetSpellTexture(2656), 7, 7, L["Metal & Stone"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton4", GetSpellTexture(2550), 7, 8, L["Cooking"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton5", GetSpellTexture(2383), 7, 9, L["Herb"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton6", GetSpellTexture(7411), 7, 12, L["Enchanting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton7", GetSpellTexture(25229), 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton8", "Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton9", "Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton10", "Interface/Icons/inv_gizmo_goblingtonkcontroller", 7, 3, L["Devices"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton11", "Interface/Icons/INV_Misc_Ammo_Gunpowder_01", 7, 2, L["Explosives"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton12", "Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton13", "Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
-		end
-		if Postal.WOWWotLKClassic == true then
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(3908), 7, 5, L["Cloth"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", GetSpellTexture(2108), 7, 6, L["Leather"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton3", GetSpellTexture(2656), 7, 7, L["Metal & Stone"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton4", GetSpellTexture(2550), 7, 8, L["Cooking"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton5", GetSpellTexture(2383), 7, 9, L["Herb"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton6", GetSpellTexture(7411), 7, 12, L["Enchanting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton7", GetSpellTexture(25229), 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton8", "Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton9", "Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton10", "Interface/Icons/inv_gizmo_goblingtonkcontroller", 7, 3, L["Devices"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton11", "Interface/Icons/INV_Misc_Ammo_Gunpowder_01", 7, 2, L["Explosives"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton12", "Interface/Icons/INV_Elemental_Primal_Nether", 7, 13, L["Materials"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton13", "Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton14", 237050, 7, 14, L["Armor Enchantment"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton15", 237172, 7, 15, L["Weapon Enchantment"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton16", "Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
-		end
-		if Postal.WOWCataClassic == true then
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(3908), 7, 5, L["Cloth"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", GetSpellTexture(2108), 7, 6, L["Leather"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton3", GetSpellTexture(2656), 7, 7, L["Metal & Stone"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton4", GetSpellTexture(2550), 7, 8, L["Cooking"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton5", GetSpellTexture(2383), 7, 9, L["Herb"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton6", GetSpellTexture(7411), 7, 12, L["Enchanting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton7", GetSpellTexture(25229), 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton8", "Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton9", "Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton10", "Interface/Icons/inv_gizmo_goblingtonkcontroller", 7, 3, L["Devices"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton11", "Interface/Icons/INV_Misc_Ammo_Gunpowder_01", 7, 2, L["Explosives"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton12", "Interface/Icons/INV_Elemental_Primal_Nether", 7, 13, L["Materials"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton13", "Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton14", 237050, 7, 14, L["Item Enchantment"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton15", "Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
-		end
-		if Postal.WOWMists == true then
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(3908), 7, 5, L["Cloth"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", GetSpellTexture(2108), 7, 6, L["Leather"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton3", GetSpellTexture(2656), 7, 7, L["Metal & Stone"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton4", GetSpellTexture(2550), 7, 8, L["Cooking"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton5", GetSpellTexture(2383), 7, 9, L["Herb"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton6", GetSpellTexture(7411), 7, 12, L["Enchanting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton7", GetSpellTexture(25229), 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton8", "Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton9", "Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton10", "Interface/Icons/inv_gizmo_goblingtonkcontroller", 7, 3, L["Devices"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton11", "Interface/Icons/INV_Misc_Ammo_Gunpowder_01", 7, 2, L["Explosives"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton12", "Interface/Icons/INV_Elemental_Primal_Nether", 7, 13, L["Materials"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton13", "Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton14", 237050, 7, 14, L["Item Enchantment"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton15", "Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
+			list = {
+				{GetSpellTextureSafe(2018), 7, 0, L["Trade Goods"]},
+				{"Interface/Icons/inv_misc_food_02", 5, 0, L["Reagent"]},
+			}
+		elseif Postal.WOWBCClassic == true then
+			list = ClassicTradeGoodsButtons({}, {})
+		elseif Postal.WOWWotLKClassic == true then
+			list = ClassicTradeGoodsButtons(
+				{{"Interface/Icons/INV_Elemental_Primal_Nether", 7, 13, L["Materials"]}},
+				{{237050, 7, 14, L["Armor Enchantment"]}, {237172, 7, 15, L["Weapon Enchantment"]}})
+		elseif Postal.WOWCataClassic == true or Postal.WOWMists == true then
+			list = ClassicTradeGoodsButtons(
+				{{"Interface/Icons/INV_Elemental_Primal_Nether", 7, 13, L["Materials"]}},
+				{{237050, 7, 14, L["Item Enchantment"]}})
 		end
 		if Postal.WOWRetail == true then
---			table.insert(QAButtons, {"Postal_QuickAttachButton1", GetSpellTexture(3908), 7, 5, L["Cloth"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton2", GetSpellTexture(2108), 7, 6, L["Leather"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton3", GetSpellTexture(2656), 7, 7, L["Metal & Stone"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton4", GetSpellTexture(2550), 7, 8, L["Cooking"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton5", GetSpellTexture(2383), 7, 9, L["Herb"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton6", GetSpellTexture(7411), 7, 12, L["Enchanting"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton7", GetSpellTexture(45357), 7, 16, L["Inscription"]})
---			table.insert(QAButtons, {"Postal_QuickAttachButton8", GetSpellTexture(25229), 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton1", 4620681, 7, 5, L["Cloth"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton2", 4620678, 7, 6, L["Leather"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton3", 4625105, 7, 7, L["Metal & Stone"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton4", 4620671, 7, 8, L["Cooking"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton5", 133939, 7, 9, L["Herb"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton6", 4620672, 7, 12, L["Enchanting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton7", 4620676, 7, 16, L["Inscription"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton8", 4620677, 7, 4, L["Jewelcrafting"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton9", "Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton10", "Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton11", "Interface/Icons/INV_Bijou_Green", 7, 18, L["Optional Reagents"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton12", "Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]})
-			table.insert(QAButtons, {"Postal_QuickAttachButton13", "Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]})
+			list = {
+				{4620681, 7, 5, L["Cloth"]},
+				{4620678, 7, 6, L["Leather"]},
+				{4625105, 7, 7, L["Metal & Stone"]},
+				{4620671, 7, 8, L["Cooking"]},
+				{133939, 7, 9, L["Herb"]},
+				{4620672, 7, 12, L["Enchanting"]},
+				{4620676, 7, 16, L["Inscription"]},
+				{4620677, 7, 4, L["Jewelcrafting"]},
+				{"Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]},
+				{"Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]},
+				{"Interface/Icons/INV_Bijou_Green", 7, 18, L["Optional Reagents"]},
+				{"Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]},
+				{"Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]},
+			}
+		end
+		for i, b in ipairs(list or {}) do
+			tinsert(QAButtons, {"Postal_QuickAttachButton"..i, b[1], b[2], b[3], b[4]})
 		end
 		for i = 1, #QAButtons, 1 do
 			CreateQAButton(QAButtons[i][1], QAButtons[i][2], QAButtons[i][3], QAButtons[i][4], QAButtons[i][5])

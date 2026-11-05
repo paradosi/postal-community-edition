@@ -731,6 +731,40 @@ function Postal:GetMoneyStringPlain(money)
 	end
 end
 
+-- Free slots in regular (family 0) bags, which is what KeepFreeSpace counts
+function Postal:FreeRegularBagSlots()
+	local free = 0
+	for bag = 0, NUM_BAG_SLOTS do
+		local bagFree, bagFam = GetContainerNumFreeSlotsSafe(bag)
+		if bagFam == 0 then
+			free = free + bagFree
+		end
+	end
+	return free
+end
+
+-- With the bags full, can this attachment still be taken because it tops up
+-- a stack already in the bags?
+function Postal:CanStackInBags(mailIndex, attachIndex)
+	local _, _, _, count = GetInboxItem(mailIndex, attachIndex)
+	local link = GetInboxItemLink(mailIndex, attachIndex)
+	local itemID = link and strmatch(link, "item:(%d+)")
+	local stackSize = link and select(8, GetItemInfoSafe(link))
+	if not (itemID and stackSize and count and GetItemCountSafe(itemID) > 0) then
+		return false
+	end
+	for bag = 0, NUM_BAG_SLOTS do
+		for slot = 1, GetContainerNumSlotsSafe(bag) do
+			local itemInfo = self:GetContainerItemInfoCompat(bag, slot)
+			local link2 = itemInfo and itemInfo.hyperlink
+			if link2 and strmatch(link2, "item:(%d+)") == itemID and count + (itemInfo.stackCount or 0) <= stackSize then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function Postal:CountItemsAndMoney()
 	local numAttach = 0
 	local numGold = 0

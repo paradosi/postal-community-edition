@@ -12,3 +12,4 @@ ignore:
   - .gitignore
   - media/art
   - media/screenshots
+  - Libs/LibStub/tests

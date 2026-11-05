@@ -348,14 +348,7 @@ function Postal_Select:ProcessNext()
 
 			-- Check for free bag space
 			if attachIndex > 0 and not invFull and Postal.db.profile.Select.KeepFreeSpace > 0 then
-				local free = 0
-				for bag = 0, NUM_BAG_SLOTS do
-					local bagFree, bagFam
-						bagFree, bagFam = Postal.GetContainerNumFreeSlotsSafe(bag)
-					if bagFam == 0 then
-						free = free + bagFree
-					end
-				end
+				local free = Postal:FreeRegularBagSlots()
 				if free <= Postal.db.profile.Select.KeepFreeSpace then
 					invFull = true
 					invAlmostFull = nil
@@ -366,37 +359,7 @@ function Postal_Select:ProcessNext()
 			end
 
 			-- If inventory is full, check if the item to be looted can stack with an existing stack
-			local lootFlag = false
-			if attachIndex > 0 and invFull then
-				local name, itemID, itemTexture, count, quality, canUse = GetInboxItem(mailIndex, attachIndex)
-				local link = GetInboxItemLink(mailIndex, attachIndex)
-				itemID = strmatch(link, "item:(%d+)")
-				local stackSize = select(8, Postal.GetItemInfoSafe(link))
-				if itemID and stackSize and Postal.GetItemCountSafe(itemID) > 0 then
-					for bag = 0, NUM_BAG_SLOTS do
-						local ContainerNumSlots = Postal.GetContainerNumSlotsSafe(bag)
-						for slot = 1, ContainerNumSlots do
-							local count2, link2
-							local itemInfo = Postal:GetContainerItemInfoCompat(bag, slot)
-							if itemInfo then
-								count2 = itemInfo.stackCount
-								link2 = itemInfo.hyperlink
-							else
-								count2 = 0
-								link2 = nil
-							end
-							if link2 then
-								local itemID2 = strmatch(link2, "item:(%d+)")
-								if itemID == itemID2 and count + count2 <= stackSize then
-									lootFlag = true
-									break
-								end
-							end
-						end
-						if lootFlag then break end
-					end
-				end
-			end
+			local lootFlag = attachIndex > 0 and invFull and Postal:CanStackInBags(mailIndex, attachIndex)
 
 			if attachIndex > 0 and (lootFlag or not invFull) then
 				-- If there's attachments, take the item

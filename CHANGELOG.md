@@ -17,6 +17,12 @@ All notable changes to Postal (TBC Anniversary) will be documented in this file.
 - The New Profile and Quick Attach recipient dialogs read the right text box when another popup is already open
 - Russian client: the Wire subject no longer shows stray "+" signs
 - Copying or returning a mail with no subject no longer causes a Lua error
+- Opening Help no longer reports a "Missing entry" locale error, and its bug-report link points at this project
+
+### Changed
+- Removed leftover translations for a Mr.Plow option and an old CurseForge bug-report link that no longer exist
+- Library test files are no longer shipped in the download
+- Open All and Select share their bag-space checks, and Quick Attach builds its button lists from one shared table, instead of each keeping its own copy
 
 ## 4.4.4 — 2026-11-05
 
