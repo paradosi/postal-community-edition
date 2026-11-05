@@ -1,5 +1,9 @@
 package-as: Postal
 
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
 ignore:
   - README.md
   - CHANGELOG.md
