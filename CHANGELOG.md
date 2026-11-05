@@ -2,6 +2,12 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
+## 4.4.4 — 2026-11-05
+
+### Changed
+- Updated for the current clients (Retail 12.1.5, TBC Anniversary 2.5.6 and Classic Era 1.15.9), so the addon no longer shows as out of date
+- Release notes on CurseForge and Wago are now this changelog instead of the commit log
+
 ## 4.4.3 — 2026-09-02
 
 ### Fixed
