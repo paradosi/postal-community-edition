@@ -274,7 +274,9 @@ function Postal_Express.SetEnableAltClick(dropdownbutton, arg1, arg2, checked)
 		-- Retail has no OnTooltipSetItem script; its hooks are permanent and check the setting
 		if IsClassicClient() and MailFrame:IsVisible() and not self:IsHooked(GameTooltip, "OnTooltipSetItem") then
 			self:HookScript(GameTooltip, "OnTooltipSetItem")
-			self:RawHook("ContainerFrameItemButton_OnModifiedClick", true)
+			if ContainerFrameItemButton_OnModifiedClick then
+				self:RawHook("ContainerFrameItemButton_OnModifiedClick", true)
+			end
 		end
 	else
 		if self:IsHooked(GameTooltip, "OnTooltipSetItem") then
