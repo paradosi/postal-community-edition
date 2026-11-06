@@ -106,20 +106,18 @@ function Postal_DoNotWant:OnEnable()
 		b.returnicon:Show()
 	end
 
-	self:RawHook("InboxFrame_Update", true)
+	Postal.HookMailUpdate(self, "InboxFrame_Update", true)
 end
 
 function Postal_DoNotWant:OnDisable()
-	if self:IsHooked("InboxFrame_Update") then
-		self:Unhook("InboxFrame_Update")
-	end
+	Postal.UnhookMailUpdate(self, "InboxFrame_Update")
 	for i = 1, 7 do
 		_G["MailItem"..i.."ExpireTime"].returnicon:Hide()
 	end
 end
 
 function Postal_DoNotWant:InboxFrame_Update()
-	self.hooks["InboxFrame_Update"]()
+	Postal.CallOriginalMailUpdate(self, "InboxFrame_Update")
 	for i = 1, 7 do
 		local index = i + (InboxFrame.pageNum-1)*7
 		local b = _G["MailItem"..i.."ExpireTime"].returnicon

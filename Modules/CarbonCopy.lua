@@ -6,7 +6,7 @@ Postal_CarbonCopy.description = L["Allows you to copy the contents of a mail."]
 -- luacheck: globals InboxFrame OpenMailScrollFrame
 
 function Postal_CarbonCopy:OnEnable()
-	self:Hook("OpenMail_Update", true)
+	Postal.HookMailUpdate(self, "OpenMail_Update")
 	if OpenMailScrollFrame:IsVisible() then
 		self:OpenMail_Update()
 	end

@@ -12,9 +12,10 @@ Based on the original [Postal](https://www.wowace.com/projects/postal) addon, up
 
 | Version | Interface | Status |
 |---|---|---|
-| Retail (Midnight) | 120001 | ✅ Primary target |
-| TBC Classic Anniversary | 20505 | ✅ Supported |
-| Classic Era (Vanilla) | 11508 | ✅ Supported |
+| Retail (Midnight) | 120105 | ✅ Primary target |
+| TBC Classic Anniversary | 20506 | ✅ Supported |
+| Classic Era (Vanilla) | 11509 | ✅ Supported |
+| WoW Forever | 16001 | ✅ Supported |
 | Mists of Pandaria Anniversary | 50502 | ✅ Supported |
 | Wrath of the Lich King Classic | 30403 | ⚠️ TOC included, servers currently offline |
 | Cataclysm Classic | 40402 | ⚠️ TOC included, servers currently offline |

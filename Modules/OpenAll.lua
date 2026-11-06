@@ -349,7 +349,7 @@ function Postal_OpenAll:Reset(event, ...)
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
 	button:SetText(L["Open All"])
 	Postal:DisableInbox()
-	InboxFrame_Update()
+	Postal.UpdateInbox()
 	if event == "MAIL_CLOSED" or event == "PLAYER_LEAVING_WORLD" or (event == "PLAYER_INTERACTION_MANAGER_FRAME_HIDE" and paneType == Enum.PlayerInteractionType.MailInfo) then
 		if Postal.WOWBCClassic then
 			self:UnregisterEvent("MAIL_CLOSED")

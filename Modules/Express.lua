@@ -201,7 +201,7 @@ function Postal_Express:ContainerFrameItemButtonOnModifiedClick(bag, slot, butto
 			local added = (itemlocked and 0) or -1
 			for pass = 0,4 do
 				local bmax = NUM_BAG_FRAMES
-				if Postal.WOWRetail then
+				if Postal.WOWMainline then
 					bmax = bmax + NUM_REAGENTBAG_FRAMES
 				end
 				for b = 0,bmax do

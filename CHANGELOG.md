@@ -4,6 +4,9 @@ All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
 ## 4.4.5 — 2026-11-05
 
+### Added
+- **WoW Forever support.** Forever's mailbox is built differently from the other clients', so Select, Do Not Want, Open All and Carbon Copy now hook it the way it works there. Quick Attach shows Forever's trade goods categories, and reagent bags and Battle.net friend autocomplete work as they do on Retail.
+
 ### Fixed
 - Open All and the Select "Open" button no longer hang on "In Progress" when your bags fill up or a mail holds a unique item you already have. Postal never noticed the game's "inventory full" error
 - Forward: forwarding a mail that has text no longer causes a Lua error on TBC Anniversary and Classic Era

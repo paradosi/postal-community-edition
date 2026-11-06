@@ -73,6 +73,10 @@ Postal.WOWWotLKClassic = false
 Postal.WOWCataClassic = false
 Postal.WOWMists = false
 Postal.WOWRetail = false
+Postal.WOWForever = false
+-- Retail or WoW Forever: the modern UI engine (reagent bag, C_BattleNet
+-- friend info, frame-method mail window on Forever), whatever the content
+Postal.WOWMainline = false
 
 -- Use a common frame and setup some common functions for the Postal dropdown menus
 local Postal_DropDownMenu = CreateFrame("Frame", "Postal_DropDownMenu")
@@ -167,6 +171,8 @@ function Postal:OnInitialize()
 	if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CATACLYSM_CLASSIC then Postal.WOWCataClassic = true end
 	if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MISTS_CLASSIC then Postal.WOWMists = true end
 	if _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE then Postal.WOWRetail = true end
+	if _G.WOW_PROJECT_CAMELOT and _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CAMELOT then Postal.WOWForever = true end
+	Postal.WOWMainline = Postal.WOWRetail or Postal.WOWForever
 --	if Postal.WOWClassic then DEFAULT_CHAT_FRAME:AddMessage("Postal WOW Classic", 0.0, 0.69, 0.94) end
 --	if Postal.WOWBCClassic then DEFAULT_CHAT_FRAME:AddMessage("Postal WOW BC Classic", 0.0, 0.69, 0.94) end
 --	if Postal.WOWWotLKClassic then DEFAULT_CHAT_FRAME:AddMessage("Postal WOW WotLK Classic", 0.0, 0.69, 0.94) end
@@ -218,7 +224,7 @@ function Postal:OnInitialize()
 	Postal_ModuleMenuButton:SetWidth(25)
 	Postal_ModuleMenuButton:SetHeight(25)
 	Postal_ModuleMenuButton:SetPoint("TOPRIGHT", -22, 2)
-	if Postal.WOWRetail then Postal_ModuleMenuButton:SetFrameLevel(501) end -- Seems like a Blizzard bug to need this to make Postal menu visible.
+	if Postal.WOWMainline then Postal_ModuleMenuButton:SetFrameLevel(501) end -- Seems like a Blizzard bug to need this to make Postal menu visible.
 	Postal_ModuleMenuButton:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 	Postal_ModuleMenuButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Round")
 	Postal_ModuleMenuButton:SetDisabledTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
@@ -340,6 +346,58 @@ end
 
 -- The edit box of the popup actually showing: StaticPopup1 is only right when
 -- no other popup was already open
+-- WoW Forever's mail window (ahead of Retail's) made the inbox and open-mail
+-- refreshes frame methods: InboxFrame:Update() and OpenMailFrame:Update()
+-- instead of InboxFrame_Update() and OpenMail_Update(). These hook or call
+-- whichever the client has. A module's handler keeps its old name, so
+-- module:InboxFrame_Update() / module:OpenMail_Update() work on every client.
+-- The hook target for "InboxFrame_Update" or "OpenMail_Update": the frame and
+-- its "Update" method where the frame has one (Forever), else the global
+-- function's name. The frame is tested first so a compatibility global that
+-- another addon defines on Forever is not hooked by mistake.
+local function MailHookTarget(which)
+	local frame = (which == "InboxFrame_Update") and InboxFrame or OpenMailFrame
+	if frame and frame.Update then return frame, "Update" end
+	return which
+end
+
+function Postal.HookMailUpdate(module, which, raw)
+	local hook = raw and module.RawHook or module.Hook
+	local target, method = MailHookTarget(which)
+	if method then
+		hook(module, target, method, which, true)
+	else
+		hook(module, target, true)
+	end
+end
+
+function Postal.IsMailUpdateHooked(module, which)
+	return module:IsHooked(MailHookTarget(which))
+end
+
+function Postal.UnhookMailUpdate(module, which)
+	if module:IsHooked(MailHookTarget(which)) then
+		module:Unhook(MailHookTarget(which))
+	end
+end
+
+-- The original update, from inside a raw hook's handler.
+function Postal.CallOriginalMailUpdate(module, which)
+	local target, method = MailHookTarget(which)
+	if method then
+		return module.hooks[target][method](target)
+	end
+	return module.hooks[which]()
+end
+
+function Postal.UpdateInbox()
+	if InboxFrame.Update then
+		InboxFrame:Update()
+	else
+		InboxFrame_Update()
+	end
+end
+
 function Postal.GetPopupEditBox(dialog)
 	if dialog then
 		if dialog.GetEditBox then return dialog:GetEditBox() end

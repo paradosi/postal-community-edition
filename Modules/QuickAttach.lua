@@ -126,6 +126,22 @@ function Postal_QuickAttach:OnEnable()
 				{"Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]},
 				{"Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]},
 			}
+		elseif Postal.WOWForever == true then
+			-- Forever files trade goods under Retail's subclasses, but has no
+			-- Jewelcrafting, Inscription or Optional Reagents items (checked
+			-- against its Item table, build 1.60.1.70790, 2026-11-06)
+			list = {
+				{4620681, 7, 5, L["Cloth"]},
+				{4620678, 7, 6, L["Leather"]},
+				{4625105, 7, 7, L["Metal & Stone"]},
+				{4620671, 7, 8, L["Cooking"]},
+				{133939, 7, 9, L["Herb"]},
+				{4620672, 7, 12, L["Enchanting"]},
+				{"Interface/Icons/INV_Gizmo_FelIronCasing", 7, 1, L["Parts"]},
+				{"Interface/Icons/INV_Elemental_Primal_Air", 7, 10, L["Elemental"]},
+				{"Interface/Icons/INV_Misc_Rune_09", 7, 11, L["Other"]},
+				{"Interface/Icons/Ability_Ensnare", 7, -1, L["Trade Goods"]},
+			}
 		end
 		for i, b in ipairs(list or {}) do
 			tinsert(QAButtons, {"Postal_QuickAttachButton"..i, b[1], b[2], b[3], b[4]})
@@ -171,7 +187,7 @@ function Postal_QuickAttachLeftButtonClick(classID, subclassID)
 		SendMailNameEditBox:HighlightText()
 	end
 	local bagIDmax = NUM_BAG_FRAMES
-	if Postal.WOWRetail then
+	if Postal.WOWMainline then
 		bagIDmax = bagIDmax + NUM_REAGENTBAG_FRAMES
 	end
 	for bagID = 0, bagIDmax, 1 do
@@ -347,7 +363,7 @@ function Postal_QuickAttach.ModuleMenu(self, level)
 		info.checked = Postal.db.profile.QuickAttach.EnableBag4
 		UIDropDownMenu_AddButton(info, level)
 
-		if Postal.WOWRetail then
+		if Postal.WOWMainline then
 			info.text = L["Enable for reagent bag"]
 			info.func = Postal.SaveOption
 			info.arg1 = "QuickAttach"

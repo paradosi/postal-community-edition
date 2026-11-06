@@ -130,7 +130,7 @@ function Postal_Select:OnEnable()
 		end
 	end
 
-	self:RawHook("InboxFrame_Update", true)
+	Postal.HookMailUpdate(self, "InboxFrame_Update", true)
 	if Postal.WOWBCClassic then
 		self:RegisterEvent("MAIL_SHOW")
 	else
@@ -152,9 +152,7 @@ end
 
 function Postal_Select:OnDisable()
 	self:Reset()
-	if self:IsHooked("InboxFrame_Update") then
-		self:Unhook("InboxFrame_Update")
-	end
+	Postal.UnhookMailUpdate(self, "InboxFrame_Update")
 	openButton:Hide()
 	returnButton:Hide()
 	MailItem1:SetPoint("TOPLEFT", "InboxFrame", "TOPLEFT", 28, -80)
@@ -262,9 +260,7 @@ function Postal_Select:HandleSelect(mode)
 
 	--protect the user from changing anything while were in process
 	Postal:DisableInbox(1)
-	if self:IsHooked("InboxFrame_Update") then
-		self:Unhook("InboxFrame_Update")
-	end
+	Postal.UnhookMailUpdate(self, "InboxFrame_Update")
 
 	for i = 1, 7 do
 		local index = i + (InboxFrame.pageNum-1) * 7
@@ -421,7 +417,7 @@ function Postal_Select:ProcessNext()
 end
 
 function Postal_Select:InboxFrame_Update()
-	self.hooks["InboxFrame_Update"]()
+	Postal.CallOriginalMailUpdate(self, "InboxFrame_Update")
 	for i = 1, 7 do
 		local index = i + (InboxFrame.pageNum-1)*7
 		local CB = _G["PostalInboxCB"..i]
@@ -489,7 +485,7 @@ function Postal_Select:MAIL_INBOX_UPDATE()
 end
 
 function Postal_Select:Reset(event, ...)
-	if not self:IsHooked("InboxFrame_Update") then self:RawHook("InboxFrame_Update", true) end
+	if not Postal.IsMailUpdateHooked(self, "InboxFrame_Update") then Postal.HookMailUpdate(self, "InboxFrame_Update", true) end
 
 	updateFrame:Hide()
 	self:UnregisterEvent("UI_ERROR_MESSAGE")
