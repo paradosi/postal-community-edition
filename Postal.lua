@@ -78,6 +78,25 @@ Postal.WOWForever = false
 -- friend info, frame-method mail window on Forever), whatever the content
 Postal.WOWMainline = false
 
+-- WoW Forever has regional unique names: every character is "First Last",
+-- unique across the region, so a realm suffix is never needed. UnitName
+-- returns the surname separately, as its second value.
+function Postal.UsesRegionalNames()
+	if RegionalUniqueNamesEnabled then
+		return RegionalUniqueNamesEnabled() == true
+	end
+	return false
+end
+
+-- The name other players mail this character by
+function Postal.GetPlayerName()
+	local name, surname = UnitName("player")
+	if name and surname and surname ~= "" and Postal.UsesRegionalNames() and not strfind(name, " ", 1, true) then
+		return name.." "..surname
+	end
+	return name
+end
+
 -- Use a common frame and setup some common functions for the Postal dropdown menus
 local Postal_DropDownMenu = CreateFrame("Frame", "Postal_DropDownMenu")
 Postal_DropDownMenu.displayMode = "MENU"

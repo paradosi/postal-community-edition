@@ -2,6 +2,15 @@
 
 All notable changes to Postal (TBC Anniversary) will be documented in this file.
 
+## 4.4.6 — 2026-11-09
+
+**This is the final release.** Postal Community Edition is retired and will receive no further updates. The original [Postal](https://www.curseforge.com/wow/addons/postal) and its other forks remain available.
+
+### Fixed
+- WoW Forever: the Alts menu now saves and sends to your characters' full names ("First Last"). It used to use the first name alone, which could send mail to someone else or fail. Each character's old entry is replaced the next time you log into it
+- WoW Forever: mail picked from the alt lists or autocomplete no longer adds a realm name, which Forever's names don't need
+- WoW Forever: Postal now recognises your own character, so it no longer offers or auto-fills your own name as a recipient
+
 ## 4.4.5 — 2026-11-05
 
 ### Added

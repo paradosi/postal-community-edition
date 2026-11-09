@@ -1,5 +1,8 @@
 # Postal Community Edition
 
+> [!CAUTION]
+> **This project is retired (2026-11-09).** 4.4.6 is the final release: there will be no further updates, and issues and pull requests are closed. Postal is well served elsewhere: use the original [Postal](https://www.curseforge.com/wow/addons/postal) or one of its maintained forks. The code stays here, MIT-licensed as before, for anyone who wants to fork it.
+
 <img src="https://github.com/paradosi/postal-community-edition/blob/main/media/art/mailicon.png?raw=true" width="100" height="100" alt="Postal Icon" />
 
 **Enhanced mailbox support for World of Warcraft.**

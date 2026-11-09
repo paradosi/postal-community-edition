@@ -130,17 +130,21 @@ end
 function Postal_BlackBook:AddAlt()
 	local realm = GetRealmName()
 	local faction = UnitFactionGroup("player")
-	local player = UnitName("player")
+	local player = Postal.GetPlayerName()
 	local level = UnitLevel("player")
 	local _, class = UnitClass("player")
 	if not realm or not faction or not player or not level or not class then return end
 	local namestring = ("%s|%s|%s|%s|%s"):format(player, realm, faction, level, class)
 	local db = Postal.db.global.BlackBook.alts
+	-- Before 4.4.6 Forever alts were saved by first name alone; drop this
+	-- character's old entry so it isn't listed twice
+	local legacyName = Postal.UsesRegionalNames() and UnitName("player") or nil
+	if legacyName == player then legacyName = nil end
 	enableAltsMenu = false
 	enableAllAltsMenu = false
 	for i = #db, 1, -1 do
 		local p, r, f, l, c = strsplit("|", db[i])
-		if p == player and r == realm and f == faction then
+		if (p == player or p == legacyName) and r == realm and f == faction then
 			tremove(db, i)
 		end
 		if p ~= player and r == realm and f == faction then
@@ -159,7 +163,7 @@ end
 function Postal_BlackBook.DeleteAlt(dropdownbutton, arg1, arg2, checked)
 	local realm = GetRealmName()
 	local faction = UnitFactionGroup("player")
-	local player = UnitName("player")
+	local player = Postal.GetPlayerName()
 	local db = Postal.db.global.BlackBook.alts
 	enableAltsMenu = false
 	enableAllAltsMenu  = false
@@ -216,7 +220,7 @@ function Postal_BlackBook:MailFrameTab_OnClick(button, tab)
 	if Postal.db.profile.BlackBook.AutoFill and tab == 2 then
 		local realm = GetRealmName()
 		local faction = UnitFactionGroup("player")
-		local player = UnitName("player")
+		local player = Postal.GetPlayerName()
 
 		-- Find the first eligible recently mailed
 		for i = 1, #Postal.db.profile.BlackBook.recent do
@@ -254,7 +258,7 @@ function Postal_BlackBook:OnChar(editbox, ...)
 	local textlen = strlen(text)
 	local realm = GetRealmName()
 	local faction = UnitFactionGroup("player")
-	local player = UnitName("player")
+	local player = Postal.GetPlayerName()
 	local newname
 
 	-- Check all alt list
@@ -265,7 +269,7 @@ function Postal_BlackBook:OnChar(editbox, ...)
 			local p, r, f = strsplit("|", db[i])
 			if p ~= player and r ~= realm then
 				if strfind(strupper(p.."-"..r):gsub("%s*",""), nosptext, 1, 1) == 1 then
-					newname = p.."-"..r
+					newname = Postal.UsesRegionalNames() and p or p.."-"..r
 					break
 				end
 			end
@@ -362,6 +366,8 @@ function Postal_BlackBook:OnChar(editbox, ...)
 end
 
 function Postal_BlackBook.SetSendMailName(dropdownbutton, arg1, arg2, checked)
+	-- Regional names are unique without a realm, and contain no "-"
+	if Postal.UsesRegionalNames() then arg1 = strsplit("-", arg1) end
 	SendMailNameEditBox:SetText(arg1)
 	if SendMailNameEditBox:HasFocus() then SendMailSubjectEditBox:SetFocus() end
 	CloseDropDownMenus()
@@ -425,7 +431,7 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 		local db = Postal.db.global.BlackBook.alts
 		local realm = GetRealmName()
 		local faction = UnitFactionGroup("player")
-		local player = UnitName("player")
+		local player = Postal.GetPlayerName()
 		for k in pairs(db) do
 			local p, r, f, l, c = strsplit("|", db[k])
 			if r == realm and f == faction and p ~= player then
@@ -518,7 +524,7 @@ function Postal_BlackBook.BlackBookMenu(self, level)
 		if UIDROPDOWNMENU_MENU_VALUE == "recent" then
 			local realm = GetRealmName()
 			local faction = UnitFactionGroup("player")
-			local player = UnitName("player")
+			local player = Postal.GetPlayerName()
 			local db = Postal.db.profile.BlackBook.recent
 			if #db == 0 then return end
 			for i = 1, #db do
@@ -596,7 +602,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 			local db = Postal.db.global.BlackBook.alts
 			local realm = GetRealmName()
 			local faction = UnitFactionGroup("player")
-			local player = UnitName("player")
+			local player = Postal.GetPlayerName()
 			local plre = player.."-"..realm
 			info.notCheckable = 1
 			-- 25 or less, don't need multi level menus
@@ -710,7 +716,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 			local db = Postal.db.global.BlackBook.alts
 			local realm = GetRealmName()
 			local faction = UnitFactionGroup("player")
-			local player = UnitName("player")
+			local player = Postal.GetPlayerName()
 			if all then db = Postal.db.global.BlackBook.alts else db = altstable end
 			for i = 1, #db do
 				local p, r, f, l, c = strsplit("|", db[i])
@@ -758,7 +764,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 			local endIndex = math.min(startIndex+24, #db)
 			local realm = GetRealmName()
 			local faction = UnitFactionGroup("player")
-			local player = UnitName("player")
+			local player = Postal.GetPlayerName()
 			for i = startIndex, endIndex do
 				local p, r, f, l, c = strsplit("|", db[i])
 				if (p ~= player or r ~= realm or f ~= faction) or all then
@@ -777,7 +783,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 
 		elseif strfind(UIDROPDOWNMENU_MENU_VALUE, "sapart") then
 			local db = altstable
-			local plre = UnitName("player").."-"..GetRealmName()
+			local plre = Postal.GetPlayerName().."-"..GetRealmName()
 			local startIndex = tonumber(strmatch(UIDROPDOWNMENU_MENU_VALUE, "sapart(%d+)")) * 25 - 24
 			local endIndex = math.min(startIndex+24, numAltsOnList)
 			for i = startIndex, endIndex do
@@ -812,7 +818,7 @@ elseif UIDROPDOWNMENU_MENU_VALUE == "allalt" then
 
 		elseif strfind(UIDROPDOWNMENU_MENU_VALUE, "aapart") then
 			local db = Postal.db.global.BlackBook.alts
-			local plre = UnitName("player").."-"..GetRealmName()
+			local plre = Postal.GetPlayerName().."-"..GetRealmName()
 			local startIndex = tonumber(strmatch(UIDROPDOWNMENU_MENU_VALUE, "aapart(%d+)")) * 25 - 24
 			local endIndex = math.min(startIndex+24, #db)
 			for i = startIndex, endIndex do
